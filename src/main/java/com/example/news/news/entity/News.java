@@ -67,6 +67,13 @@ public class News {
         this.lock = true;
     }
     public void unLockNews(){
-        this.lock = true;
+        this.lock = false;
+    }
+
+    public boolean getAliveNews(){
+        return this.aliveNews;
+    }
+    public boolean getLock(){
+        return this.lock;
     }
 }
