@@ -53,7 +53,7 @@ public class DummyDataLoader implements CommandLineRunner {
     }
 
     @PostConstruct
-    public void afterRun(){
+    public void beforeRun(){
         List<News> news = IntStream.rangeClosed(1, 30)
                 .mapToObj(i -> News.builder()
                         .newsTitle("News_"+i)

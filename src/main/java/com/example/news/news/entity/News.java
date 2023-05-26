@@ -19,6 +19,8 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long reporterIndex;
+
     @Column(nullable = false, unique = true)
     private String newsTitle;
 
@@ -45,7 +47,8 @@ public class News {
     @Builder
     public News(String newsTitle, String reporter,
                 String category, String content,
-                String mainImageUrl){
+                String mainImageUrl, Long reporterIndex){
+        this.reporterIndex = reporterIndex;
         this.newsTitle = newsTitle;
         this.reporter = reporter;
         this.category =category;
@@ -60,6 +63,9 @@ public class News {
         this.mainImageUrl = requestDto.getMainImageUrl();
     }
 
+    public void testSetId(Long id){
+        this.id = id;
+    }
     public void softDeleteNews(){
         this.aliveNews = false;
     }

@@ -34,6 +34,7 @@ public class NewsResponseDto {
                 .map(NewsVideoResponseDto::from)
                 .sorted(Comparator.comparingLong(NewsVideoResponseDto::getId))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+
         this.newsTitle = news.getNewsTitle();
         this.content = news.getContent();
         this.category = news.getCategory();
