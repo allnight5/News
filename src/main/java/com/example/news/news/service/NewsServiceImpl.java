@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService{
     private final NewsRepository newsRepository;
-
-
     @Override
     public List<NewsResponseDto> getNewsMain(){
         return newsRepository.getNewsMain();
@@ -30,15 +28,7 @@ public class NewsServiceImpl implements NewsService{
         if(newsRepository.existsByNewsTitle(requestDto.getNewsTitle())){
             throw new DataIntegrityViolationException("중복된 뉴스제목이 존재합니다.");
         }
-
-        News news = News.builder()
-                .newsTitle(requestDto.getNewsTitle())
-                .category(requestDto.getCategory())
-                .content(requestDto.getContent())
-                .mainImageUrl(requestDto.getMainImageUrl())
-                .reporter(requestDto.getReporter())
-                .build();
-
+        News news = requestDto.toEntity(1L);
         newsRepository.save(news);
         return NewsResponseDto.from(news);
     }
@@ -58,38 +48,38 @@ public class NewsServiceImpl implements NewsService{
     @Override
     @Transactional(readOnly = true)
     public NewsResponseDto getNewsById(Long newsId){
-        News news = getNews(newsId);
+        News news = getSelectOneNews(newsId);
         return NewsResponseDto.from(news);
     }
 
     @Override
     @Transactional
     public void updateNews(Long newsId, NewsUpdateRequestDto requestDto) {
-        News news = getNews(newsId);
+        News news = getSelectOneNews(newsId);
         news.updateNews(requestDto);
     }
     @Override
     @Transactional
     public void lockNews(Long newsId) {
-        News news = getNews(newsId);
+        News news = getSelectOneNews(newsId);
         news.lockNews();
     }
 
     @Override
     @Transactional
     public void unLockNews(Long newsId) {
-        News news = getNews(newsId);
+        News news = getSelectOneNews(newsId);
         news.unLockNews();
     }
 
     @Override
     @Transactional
     public void softDeleteNews(Long newsId){
-        News news = getNews(newsId);
+        News news = getSelectOneNews(newsId);
         news.softDeleteNews();
     }
 
-    private News getNews(Long newsId) {
+    private News getSelectOneNews(Long newsId) {
         return newsRepository.findByIdAndAliveNewsIsTrue(newsId)
                 .orElseThrow(
                     () -> new NoSuchElementException("해당 뉴스가 존재하지 않습니다.")

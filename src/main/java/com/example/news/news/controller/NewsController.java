@@ -52,7 +52,7 @@ public class NewsController {
     }
 
     @PostMapping("/api/news")
-    public ResponseEntity<Void> CreateMovie(@RequestBody @Valid NewsRequestDto requestDto){
+    public ResponseEntity<Void> CreateNews(@RequestBody @Valid NewsRequestDto requestDto){
         NewsResponseDto news = newsService.createNews(requestDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -66,7 +66,7 @@ public class NewsController {
             @PathVariable Long newsId,
             @RequestBody NewsUpdateRequestDto requestDto){
         newsService.updateNews(newsId, requestDto);
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/api/news/{newsId}/lock")
