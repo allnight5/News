@@ -4,7 +4,8 @@ http://localhost:8080/swagger-ui/index.html
 
 #ERD
 ---
-![newsERD](https://github.com/allnight5/News/assets/45612782/7d379105-cb63-4e15-a84f-f97e728b45a8)
+![news](https://github.com/allnight5/News/assets/45612782/53b6ff83-198b-450b-ba03-025b083e1e49)
+
 
 ---
 Get 
