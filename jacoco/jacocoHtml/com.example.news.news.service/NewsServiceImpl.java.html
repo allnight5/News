@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewsServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">news</a> &gt; <a href="index.source.html" class="el_package">com.example.news.news.service</a> &gt; <span class="el_source">NewsServiceImpl.java</span></div><h1>NewsServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.news.news.service;
+
+import com.example.news.news.dto.NewsRequestDto;
+import com.example.news.news.dto.NewsResponseDto;
+import com.example.news.news.dto.NewsSearchCond;
+import com.example.news.news.dto.NewsUpdateRequestDto;
+import com.example.news.news.entity.News;
+import com.example.news.news.repository.NewsRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.List;
+@Service
+<span class="fc" id="L17">@RequiredArgsConstructor</span>
+public class NewsServiceImpl implements NewsService{
+    private final NewsRepository newsRepository;
+    @Override
+    public List&lt;NewsResponseDto&gt; getNewsMain(){
+<span class="nc" id="L22">        return newsRepository.getNewsMain();</span>
+    }
+
+    @Override
+    @Transactional
+    public NewsResponseDto createNews(NewsRequestDto requestDto) {
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if(newsRepository.existsByNewsTitle(requestDto.getNewsTitle())){</span>
+<span class="nc" id="L29">            throw new DataIntegrityViolationException(&quot;以묐났�맂 �돱�뒪�젣紐⑹씠 議댁옱�빀�땲�떎.&quot;);</span>
+        }
+<span class="nc" id="L31">        News news = requestDto.toEntity(1L);</span>
+<span class="nc" id="L32">        newsRepository.save(news);</span>
+<span class="nc" id="L33">        return NewsResponseDto.from(news);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;NewsResponseDto&gt; getNewsPaging(Long pageNumber) {
+<span class="nc" id="L39">        return newsRepository.getNewsMainPaging(pageNumber);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;NewsResponseDto&gt; getNewsBySearchCond(NewsSearchCond newsSearchCond) {
+<span class="nc" id="L45">        return newsRepository.getNewsMainSearch(newsSearchCond);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public NewsResponseDto getNewsById(Long newsId){
+<span class="nc" id="L51">        News news = getSelectOneNews(newsId);</span>
+<span class="nc" id="L52">        return NewsResponseDto.from(news);</span>
+    }
+
+    @Override
+    @Transactional
+    public void updateNews(Long newsId, NewsUpdateRequestDto requestDto) {
+<span class="nc" id="L58">        News news = getSelectOneNews(newsId);</span>
+<span class="nc" id="L59">        news.updateNews(requestDto);</span>
+<span class="nc" id="L60">    }</span>
+    @Override
+    @Transactional
+    public void lockNews(Long newsId) {
+<span class="nc" id="L64">        News news = getSelectOneNews(newsId);</span>
+<span class="nc" id="L65">        news.lockNews();</span>
+<span class="nc" id="L66">    }</span>
+
+    @Override
+    @Transactional
+    public void unLockNews(Long newsId) {
+<span class="nc" id="L71">        News news = getSelectOneNews(newsId);</span>
+<span class="nc" id="L72">        news.unLockNews();</span>
+<span class="nc" id="L73">    }</span>
+
+    @Override
+    @Transactional
+    public void softDeleteNews(Long newsId){
+<span class="fc" id="L78">        News news = getSelectOneNews(newsId);</span>
+<span class="fc" id="L79">        news.softDeleteNews();</span>
+<span class="fc" id="L80">    }</span>
+
+    private News getSelectOneNews(Long newsId) {
+<span class="fc" id="L83">        return newsRepository.findByIdAndAliveNewsIsTrue(newsId)</span>
+<span class="fc" id="L84">                .orElseThrow(</span>
+<span class="nc" id="L85">                    () -&gt; new NoSuchElementException(&quot;�빐�떦 �돱�뒪媛� 議댁옱�븯吏� �븡�뒿�땲�떎.&quot;)</span>
+                );
+    }
+
+    @Override
+    @Transactional
+    public void deleteNews(Long newsId){
+<span class="nc" id="L92">        newsRepository.deleteNewsById(newsId);</span>
+<span class="nc" id="L93">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

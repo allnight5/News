@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewsRequestDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">news</a> &gt; <a href="index.source.html" class="el_package">com.example.news.news.dto</a> &gt; <span class="el_source">NewsRequestDto.java</span></div><h1>NewsRequestDto.java</h1><pre class="source lang-java linenums">package com.example.news.news.dto;
+
+import com.example.news.news.entity.News;
+import lombok.Getter;
+@Getter
+public class NewsRequestDto {
+<span class="nc" id="L7">    private String newsTitle;</span>
+<span class="nc" id="L8">    private String reporter;</span>
+<span class="nc" id="L9">    private String content;</span>
+<span class="nc" id="L10">    private String category;</span>
+<span class="nc" id="L11">    private String mainImageUrl;</span>
+
+    public NewsRequestDto(String newsTitle, String reporter,
+                          String content, String category,
+<span class="nc" id="L15">                          String mainImageUrl){</span>
+<span class="nc" id="L16">        this.newsTitle= newsTitle;</span>
+<span class="nc" id="L17">        this.reporter = reporter;</span>
+<span class="nc" id="L18">        this.content = content;</span>
+<span class="nc" id="L19">        this.category = category;</span>
+<span class="nc" id="L20">        this.mainImageUrl = mainImageUrl;</span>
+<span class="nc" id="L21">    }</span>
+
+    public News toEntity(Long newsId){
+
+<span class="nc" id="L25">        return News.builder().</span>
+<span class="nc" id="L26">                reporterIndex(newsId).</span>
+<span class="nc" id="L27">                newsTitle(newsTitle).</span>
+<span class="nc" id="L28">                reporter(reporter).</span>
+<span class="nc" id="L29">                content(content).</span>
+<span class="nc" id="L30">                mainImageUrl(mainImageUrl).</span>
+<span class="nc" id="L31">                category(category).</span>
+<span class="nc" id="L32">                build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

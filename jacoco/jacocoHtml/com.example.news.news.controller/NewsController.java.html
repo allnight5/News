@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">news</a> &gt; <a href="index.source.html" class="el_package">com.example.news.news.controller</a> &gt; <span class="el_source">NewsController.java</span></div><h1>NewsController.java</h1><pre class="source lang-java linenums">package com.example.news.news.controller;
+
+import com.example.news.news.dto.NewsRequestDto;
+import com.example.news.news.dto.NewsResponseDto;
+import com.example.news.news.dto.NewsSearchCond;
+import com.example.news.news.dto.NewsUpdateRequestDto;
+import com.example.news.news.service.NewsService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+<span class="nc" id="L18">@RequiredArgsConstructor</span>
+public class NewsController {
+
+    private final NewsService newsService;
+
+    @GetMapping(&quot;/api/news&quot;)
+    public ResponseEntity&lt;List&lt;NewsResponseDto&gt;&gt; getNews(){
+<span class="nc" id="L25">        List&lt;NewsResponseDto&gt; newsList = newsService.getNewsMain();</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if(newsList.isEmpty()){</span>
+<span class="nc" id="L27">            return ResponseEntity.noContent().build();</span>
+        }else {
+<span class="nc" id="L29">            return ResponseEntity.ok(newsList);</span>
+        }
+    }
+    @GetMapping(&quot;/api/news/{newsId}&quot;)
+    public ResponseEntity&lt;NewsResponseDto&gt; getNewsById(@PathVariable Long newsId){
+<span class="nc" id="L34">        return ResponseEntity.ok(newsService.getNewsById(newsId));</span>
+    }
+
+    @GetMapping(&quot;/api/news/pages/{pageNumber}&quot;)
+    public ResponseEntity&lt;List&lt;NewsResponseDto&gt;&gt; getNewsPage(@PathVariable Long pageNumber){
+<span class="nc" id="L39">        List&lt;NewsResponseDto&gt; newsList = newsService.getNewsPaging(pageNumber);</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if(newsList.isEmpty()){</span>
+<span class="nc" id="L41">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="nc" id="L43">        return ResponseEntity.ok(newsList);</span>
+    }
+
+    @GetMapping(&quot;/api/news/search&quot;)
+    public ResponseEntity&lt;List&lt;NewsResponseDto&gt;&gt; newsBySearchCond(@RequestBody NewsSearchCond searchCond) {
+<span class="nc" id="L48">        List&lt;NewsResponseDto&gt; newsList = newsService.getNewsBySearchCond(searchCond);</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if(newsList.isEmpty()){</span>
+<span class="nc" id="L50">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="nc" id="L52">        return ResponseEntity.ok(newsList);</span>
+    }
+
+    @PostMapping(&quot;/api/news&quot;)
+    public ResponseEntity&lt;Void&gt; CreateNews(@RequestBody NewsRequestDto requestDto){
+<span class="nc" id="L57">        NewsResponseDto responseDto = newsService.createNews(requestDto);</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if(responseDto == null){</span>
+<span class="nc" id="L60">            return ResponseEntity.badRequest().build();</span>
+        }
+
+<span class="nc" id="L63">        URI location = ServletUriComponentsBuilder.fromCurrentRequest()</span>
+<span class="nc" id="L64">                .path(&quot;/{id}&quot;)</span>
+<span class="nc" id="L65">                .buildAndExpand(responseDto.getId())</span>
+<span class="nc" id="L66">                .toUri();</span>
+
+<span class="nc" id="L68">        return ResponseEntity.created(location).build();</span>
+    }
+
+    @PutMapping(&quot;/api/news/{newsId}&quot;)
+    public ResponseEntity&lt;Void&gt; updateNews(
+            @PathVariable Long newsId,
+            @RequestBody NewsUpdateRequestDto requestDto){
+<span class="nc" id="L75">        newsService.updateNews(newsId, requestDto);</span>
+<span class="nc" id="L76">        return ResponseEntity.ok().build();</span>
+    }
+
+    @PatchMapping(&quot;/api/news/{newsId}/lock&quot;)
+    public ResponseEntity&lt;Void&gt; lockNews(
+            @PathVariable Long newsId){
+<span class="nc" id="L82">        newsService.lockNews(newsId);</span>
+<span class="nc" id="L83">        return ResponseEntity.ok().build();</span>
+    }
+
+    @PatchMapping(&quot;/api/news/{newsId}/unlock&quot;)
+    public ResponseEntity&lt;Void&gt; unLockNews(
+            @PathVariable Long newsId){
+<span class="nc" id="L89">        newsService.unLockNews(newsId);</span>
+<span class="nc" id="L90">        return ResponseEntity.ok().build();</span>
+    }
+
+    @DeleteMapping(&quot;/api/news/{newsId}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteNews(
+            @PathVariable Long newsId) {
+<span class="nc" id="L96">        newsService.deleteNews(newsId);</span>
+<span class="nc" id="L97">        return ResponseEntity.ok().build();</span>
+    }
+
+    @PatchMapping(&quot;/api/news/soft_delete/{newsId}&quot;)
+    public ResponseEntity&lt;Void&gt; softDeleteNews(
+            @PathVariable Long newsId) {
+<span class="nc" id="L103">        newsService.softDeleteNews(newsId);</span>
+<span class="nc" id="L104">        return ResponseEntity.ok().build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
