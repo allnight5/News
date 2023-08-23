@@ -2,6 +2,13 @@
 Swagger 사용한 API 명세 Application run 후 아래 링크
 http://localhost:8080/swagger-ui/index.html
 
+#ERD
+---
+![news (2)](https://github.com/allnight5/News/assets/45612782/98be1462-77a9-489f-810c-0a6640988874)
+
+
+
+---
 Get 
 GET /api/news
 
