@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Black List</title>
+</head>
+<body>
+<h2>Black List</h2>
+<li><a href="/index.html">메인페이지</a></li>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Accessor</th>
+    <th>Email</th>
+    <th>Restriction End Date Time</th>
+    <th>Restrictions</th>
+  </tr>
+  <tr th:each="memberList : ${getBlackListResponse}">
+    <td th:text="${memberList.id}"></td>
+    <td th:text="${memberList.email}"></td>
+    <td th:text="${memberList.accessor}"></td>
+    <td th:text="${memberList.restriction}"></td>
+    <td th:text="${memberList.restrictionEndDateTime}"></td>
+  </tr>
+</table>
+</body>
+</html>

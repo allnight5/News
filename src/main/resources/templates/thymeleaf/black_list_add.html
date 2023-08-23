@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Black List</title>
+</head>
+<body>
+<h2>Black List</h2>
+<li><a href="../index.html">메인페이지</a></li>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Accessor</th>
+    <th>Email</th>
+    <th>Restriction End Date Time</th>
+    <th>Restrictions</th>
+  </tr>
+  <tr th:each="memberList : ${getMemberListResponse}">
+    <td th:text="${memberList.id}"></td>
+    <td th:text="${memberList.email}"></td>
+    <td th:text="${memberList.password}"></td>
+    <td th:text="${memberList.createdDate}"></td>
+    <td>
+      <form th:action="@{/member/add-blacklist}" method="post">
+        <ul>
+          <li th:each="restriction : ${restrictionListResponse.restrictionList}">
+            <label>
+              <input type="checkbox" th:value="${restriction}" name="selectedRestrictions"/>
+<!--
+    중복을 피하기 위해서 해당 값이 이미 포함되어있다면 체크리스트에 체크하기 위한 처리
+    th:checked="${memberList.hasRestriction(restriction) == true}"
+-->
+              <span th:text="${restriction}"></span>
+            </label>
+          </li>
+        </ul>
+        <input type="text" name="plusDateTime" th:value="3" />
+        <input type="hidden" name="memberId" th:value="${memberList.id}"/>
+        <button type="submit">Apply Restrictions</button>
+      </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
